@@ -1,7 +1,11 @@
 .App {
-  text-align: center;
+  padding-left: 50px;
+  padding-top: 50px;
 }
 
+.ml-5 {
+  margin-left: 50px;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
