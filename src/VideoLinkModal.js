@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import styles from "./styles.css";
+import styles from "./VideoAdd/styles.css";
 
-const VideoAdd = (props) => {
+const VideoLinkModal = (props) => {
 
   const [url, setUrl] =  useState('');
   const addVideo = (e) => {
@@ -42,5 +42,5 @@ const VideoAdd = (props) => {
   );
 }
 
-export default VideoAdd;
+export default VideoLinkModal;
 

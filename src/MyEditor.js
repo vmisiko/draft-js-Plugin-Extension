@@ -3,9 +3,10 @@ import Editor, { createEditorStateWithText, composeDecorators } from '@draft-js-
 import createSideToolbarPlugin from '@draft-js-plugins/side-toolbar';
 import '@draft-js-plugins/side-toolbar/lib/plugin.css';
 import {
-  HeadlineOneButton,
-  HeadlineTwoButton,
-  BlockquoteButton,
+  // HeadlineOneButton,
+  // HeadlineTwoButton,
+  // BlockquoteButton,
+  CodeButton,
   CodeBlockButton,
 } from '@draft-js-plugins/buttons'
 import createVideoPlugin from '@draft-js-plugins/video';
@@ -15,6 +16,8 @@ import createFocusPlugin from '@draft-js-plugins/focus';
 import createResizeablePlugin from '@draft-js-plugins/resizeable';
 import ImageAdd from './ImageAdd';
 import VideoAdd from './VideoAdd';
+import VideoButton from './Buttons/components/VideoButton';
+import ImageButton from './Buttons/components/ImageButton';
 
 const focusPlugin = createFocusPlugin();
 const resizeablePlugin = createResizeablePlugin();
@@ -41,6 +44,8 @@ const text =
 export default class SimpleSideToolbarEditor extends Component {
   state = {
     editorState: createEditorStateWithText(text),
+    showVideo: false,
+    showImage: false,
   };
 
   componentDidMount() {
@@ -62,9 +67,45 @@ export default class SimpleSideToolbarEditor extends Component {
     this.editor.focus();
   };
 
+  openVideoLink = () => {
+    console.log('open');
+    this.setState({
+      showVideo: true,
+    })
+  }
+
+  openImageLink = () => {
+    console.log('open');
+    this.setState({
+      showImage: true,
+    })
+  }
+
+  addVideo = (event) => {
+    console.log(event);
+    this.setState({showVideo: false});
+    videoPlugin.addVideo(event);
+  }
+  
+  close = () => {
+    console.log('closing....')
+    this.setState({
+      showVideo: false,
+      showImage: false
+    });
+  }
+
   render() {
     return (
       <div>
+        <VideoAdd 
+          className="my-5" 
+          show={this.state.showVideo}
+          editorState={this.state.editorState}
+          onChange={this.onChange}
+          modifier={videoPlugin.addVideo}
+          close={this.close}
+        />
         <div className="border-1 border-gray-400 h-30"onClick={this.focus}>
           <Editor
             editorState={this.state.editorState}
@@ -78,28 +119,31 @@ export default class SimpleSideToolbarEditor extends Component {
           {
             // may be use React.Fragment instead of div to improve perfomance after React 16
             (externalProps) => (
-              <div>
-                <HeadlineOneButton {...externalProps} />
-                <HeadlineTwoButton {...externalProps} />
-                <BlockquoteButton {...externalProps} />
-                <CodeBlockButton {...externalProps} />
+              <div className='flex spacing-x-1 ml-2 py-1'>
+                <ImageButton
+                  {...externalProps} 
+                  openImageLink={this.openImageLink}
+                />
+                <VideoButton  
+                  {...externalProps} 
+                  openVideoLink={this.openVideoLink}
+                />
+               
+                <CodeButton className="-mt-5" {...externalProps} />
+
               </div>
             )
           }
 
-          </SideToolbar>
-          
+          </SideToolbar> 
         </div>
-        <VideoAdd
-          className="mt-10"
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          modifier={videoPlugin.addVideo}
-        />
+        
         <ImageAdd
+          initAddImage={this.state.showImage}
           editorState={this.state.editorState}
           onChange={this.onChange}
           modifier={imagePlugin.addImage}
+          close={this.close}
         />
       </div>
     );

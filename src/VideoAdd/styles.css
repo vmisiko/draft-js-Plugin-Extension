@@ -37,6 +37,7 @@
 
 .addVideoButton:focus {
   outline: 0; /* reset for :focus */
+  border: none;
 }
 
 .addVideoButton:hover {
